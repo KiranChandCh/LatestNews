@@ -3,13 +3,19 @@ package com.ckc.compose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.ckc.compose.ui.theme.JetpackComposeTheme
 
@@ -23,7 +29,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    CreateLazyColumn()
+                    CreateLazyColumnMultipleRows()
                 }
             }
         }
@@ -31,18 +37,29 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun CreateLazyColumn() {
+fun CreateLazyColumnMultipleRows() {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val lazyColumn = createRef()
-        
-        LazyColumn(modifier = Modifier.constrainAs(lazyColumn) {
-            top.linkTo(parent.top)
-            bottom.linkTo(parent.bottom)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)        }
-        ) {
-            items(100) { index ->
-                Text(text = "Item #$index")
+        Row(modifier = Modifier.fillMaxSize()) {
+            // First LazyColumn
+            LazyColumn(modifier = Modifier.weight(1f).fillMaxHeight()) {
+                items(20) { index ->
+                    Text(text = "Left Item #$index", modifier = Modifier.padding(8.dp))
+                }
+            }
+
+            // Divider
+            Divider(
+                color = androidx.compose.ui.graphics.Color.Black,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(1.dp)
+            )
+
+            // Second LazyColumn
+            LazyColumn(modifier = Modifier.weight(1f).fillMaxHeight()) {
+                items(20) { index ->
+                    Text(text = "Right Item #$index", modifier = Modifier.padding(8.dp))
+                }
             }
         }
     }
