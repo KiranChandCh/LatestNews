@@ -4,13 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.ckc.compose.ui.theme.JetpackComposeTheme
 
@@ -24,7 +23,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    CreateConstraintLayout()
+                    CreateLazyColumn()
                 }
             }
         }
@@ -32,35 +31,19 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun CreateConstraintLayout() {
+fun CreateLazyColumn() {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (button, text) = createRefs()
-
-        Button(
-            onClick = { /* Handle click */ },
-            modifier = Modifier.constrainAs(button) {
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+        val lazyColumn = createRef()
+        
+        LazyColumn(modifier = Modifier.constrainAs(lazyColumn) {
+            top.linkTo(parent.top)
+            bottom.linkTo(parent.bottom)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)        }
         ) {
-            Text("Centered Button")
-        }
-
-        Text(
-            "Centered Text",
-            modifier = Modifier.constrainAs(text) {
-                top.linkTo(button.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
+            items(100) { index ->
+                Text(text = "Item #$index")
             }
-        )
+        }
     }
-}
-
-@Preview
-@Composable
-fun SampleConstraintLayoutPreview() {
-    CreateConstraintLayout()
 }
