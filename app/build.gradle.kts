@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.ckc.compose"
+    namespace = "com.ckc.kotlincoroutine"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.ckc.compose"
+        applicationId = "com.ckc.kotlincoroutine"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

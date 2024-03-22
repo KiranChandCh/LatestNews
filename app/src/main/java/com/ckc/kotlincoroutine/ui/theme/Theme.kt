@@ -1,4 +1,4 @@
-package com.ckc.compose.ui.theme
+package com.ckc.kotlincoroutine.ui.theme
 
 import android.app.Activity
 import android.os.Build

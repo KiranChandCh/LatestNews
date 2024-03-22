@@ -1,4 +1,4 @@
-package com.ckc.compose
+package com.ckc.kotlincoroutine
 
 import org.junit.Test
 

@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "JetpackCompose"
+rootProject.name = "KotlinCoroutine"
 include(":app")
