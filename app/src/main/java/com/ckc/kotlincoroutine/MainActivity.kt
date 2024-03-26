@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RandomDogImage()
+                    DogImageScreen()
                     //ImageWithText()
                 }
             }
@@ -43,38 +43,20 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-/*@Composable
-fun ImageWithText() {
-    // Remember a mutable state
-    var imageUrl by remember { mutableStateOf<String?>(null) }
-
-    // Simulate setting the URL (e.g., from a button click or lifecycle event)
-    Button(onClick = { imageUrl = "https://images.dog.ceo//breeds//pekinese//n02086079_13647.jpg" }) {
-        Text("Load Image")
-    }
-
-    // Display the image if the URL is not null
-    imageUrl?.let {
-        Image(
-            painter = rememberImagePainter(it),
-            contentDescription = "Loaded Image",
-            modifier = Modifier.fillMaxWidth()
-        )
-    } ?: Text("Image URL is null")
-}*/
-
 @Composable
-fun RandomDogImage(dogViewModel: DogViewModel = viewModel()) {
-    val imageUrl by dogViewModel.dogImageUrl.collectAsState()
+fun DogImageScreen(viewModel: DogViewModel = viewModel()) {
+    // Collect as state for Compose
+    val imageUrl by viewModel.dogImageUrl.collectAsState()
 
     imageUrl?.let {
         Image(
             painter = rememberImagePainter(it),
-            contentDescription = "Random Dog Image",
+            contentDescription = "Dog Image",
             modifier = Modifier.fillMaxWidth()
         )
-    } ?: Text("Loading...")
+    } ?: Text("Loading or no image available")
 }
+
 
 
 
