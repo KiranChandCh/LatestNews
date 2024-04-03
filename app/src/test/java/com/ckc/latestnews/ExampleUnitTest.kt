@@ -1,4 +1,4 @@
-package com.ckc.kotlincoroutine
+package com.ckc.latestnews
 
 import org.junit.Test
 

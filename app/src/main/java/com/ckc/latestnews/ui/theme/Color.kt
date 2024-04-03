@@ -1,4 +1,4 @@
-package com.ckc.kotlincoroutine.ui.theme
+package com.ckc.latestnews.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "KotlinCoroutine"
+rootProject.name = "LatestNews"
 include(":app")

@@ -1,11 +1,9 @@
-package com.ckc.kotlincoroutine
+package com.ckc.latestnews
 
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
     val logging = HttpLoggingInterceptor().apply {
@@ -15,15 +13,15 @@ object RetrofitInstance {
         .addInterceptor(logging)
         .build()
 
-    val moshi = Moshi.Builder() // adapter
+    /*val moshi = Moshi.Builder() // adapter
         .add(KotlinJsonAdapterFactory())
-        .build()
+        .build()*/
 
     val api: APIService by lazy {
         Retrofit.Builder()
             .client(client)
-            .addConverterFactory(MoshiConverterFactory.create(moshi)) // Ensure Moshi is set up correctly
-            .baseUrl("https://dog.ceo/api/") // Correct base URL
+            .addConverterFactory(GsonConverterFactory.create()) // Ensure Moshi is set up correctly
+            .baseUrl("https://ok.surf/api/") // Correct base URL
             .build()
             .create(APIService::class.java)
     }

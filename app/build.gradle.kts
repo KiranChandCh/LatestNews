@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.ckc.kotlincoroutine"
+    namespace = "com.ckc.latestnews"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.ckc.kotlincoroutine"
+        applicationId = "com.ckc.latestnews"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -68,10 +68,9 @@ dependencies {
 
     // Networking
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.moshi:moshi-kotlin:1.9.3")
-
-    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
-    //implementation("com.squareup.retrofit2:converter-gson:2.1.0")
+    //implementation ("com.squareup.moshi:moshi-kotlin:1.9.3")
+    //implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.12")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
 
