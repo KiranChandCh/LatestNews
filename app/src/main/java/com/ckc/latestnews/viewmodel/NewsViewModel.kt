@@ -11,25 +11,23 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class NewsViewModel: ViewModel() {
-    private val _newsSection = MutableStateFlow<List<String>?>(null)
-    private val _newsBySection = MutableStateFlow<List<String>?>(null)
-    private val _newsData = MutableStateFlow<NewsDataObject?>(null)
-    val newsData: StateFlow<NewsDataObject?> = _newsData.asStateFlow()
-    val newsBySections: StateFlow<List<String>?> = _newsBySection.asStateFlow()
-    val newsSections: StateFlow<List<String>?> = _newsSection.asStateFlow()
+    private val _newsSections = MutableStateFlow<List<String>?>(null)
+    private val _newsBySection = MutableStateFlow<NewsDataObject?>(null)
+
+    val newsSections: StateFlow<List<String>?> = _newsSections.asStateFlow()
+    val newsBySections: StateFlow<NewsDataObject?> = _newsBySection.asStateFlow()
 
 
     init {
-        fetchNewsCategories()
-        //fetchNewsData()
+        fetchNewsSections()
     }
 
-    private fun fetchNewsCategories() = viewModelScope.launch {
+    private fun fetchNewsSections() = viewModelScope.launch {
         try {
             val response = RetrofitInstance.api.getNewsSections()
             if (response.isSuccessful && response.body() != null) {
-                val sectionNAmes = response.body()
-                val request = NewsSectionsRequest(sectionNAmes)
+                _newsSections.value = response.body()
+                val request = NewsSectionsRequest(response.body())
                 getNewsBySections(request)
             } else {
                 println("API call unsuccessful: ${response.errorBody()?.string()}")
@@ -43,23 +41,11 @@ class NewsViewModel: ViewModel() {
         try {
             val response = RetrofitInstance.api.getNewsBySections(category)
             if (response.isSuccessful && response.body() != null) {
-                _newsData.value = response.body()
+                _newsBySection.value = response.body()
             }
         } catch (e: Exception) {
             println("Error fetching sections data: ${e.message}")
         }
     }
 
-    private fun fetchNewsData() = viewModelScope.launch {
-        try {
-            val response = RetrofitInstance.api.getNewsData()
-            if (response.isSuccessful && response.body() != null) {
-                _newsData.value = response.body()
-            } else {
-                println("API call unsuccessful: ${response.errorBody()?.string()}")
-            }
-        } catch (e: Exception) {
-            println("Error fetching dog image: ${e.message}")
-        }
-    }
 }
