@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import com.ckc.latestnews.model.Business
@@ -43,7 +44,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    BusinessNewsScreen()
+                    GetNewsCategories()
+                    //BusinessNewsScreen()
                 }
             }
         }
@@ -59,6 +61,17 @@ fun BusinessNewsScreen(viewModel: NewsViewModel = viewModel()) {
             items(businessList.size) { businessItem ->
                 BusinessNewsItem(businessList[businessItem])
             }
+        }
+    }
+}
+
+@Composable
+fun GetNewsCategories(viewModel: NewsViewModel = viewModel()) {
+    val newsCategories by viewModel.newsSections.collectAsState()
+    val categories = newsCategories
+    LazyColumn {
+        categories?.let { businessList ->
+
         }
     }
 }
