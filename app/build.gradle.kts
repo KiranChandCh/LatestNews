@@ -65,6 +65,7 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation ("io.coil-kt:coil-compose:1.4.0")
+    implementation("androidx.navigation:navigation-compose:2.7.4")
 
     // Networking
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

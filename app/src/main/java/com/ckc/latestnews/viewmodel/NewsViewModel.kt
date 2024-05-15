@@ -1,5 +1,6 @@
 package com.ckc.latestnews.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ckc.latestnews.RetrofitInstance
@@ -11,8 +12,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class NewsViewModel: ViewModel() {
-    private val _newsBySection = MutableStateFlow<Map<String, List<NewsItem>>>(emptyMap())
-    val newsBySections: StateFlow<Map<String, List<NewsItem>>> = _newsBySection.asStateFlow()
+    private val _newsBySection = MutableStateFlow<Map<String?, List<NewsItem>>>(emptyMap())
+    val newsBySections: StateFlow<Map<String?, List<NewsItem>>> = _newsBySection.asStateFlow()
+    private val _newsItem = MutableLiveData<NewsItem>()
 
     init {
         fetchNewsBySections()
@@ -63,5 +65,13 @@ class NewsViewModel: ViewModel() {
                 println("Error fetching sections data: ${e.message}")
             }
         }
+    }
+
+    fun setNewsItem(newsItem: NewsItem) {
+        _newsItem.value = newsItem
+    }
+
+    fun getNewsItem(): NewsItem? {
+        return _newsItem.value
     }
 }
