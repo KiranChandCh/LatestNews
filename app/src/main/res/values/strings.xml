@@ -1,4 +1,5 @@
 <resources>
+    <string name="splash">SplashScreen</string>
     <string name="app_name">LatestNews</string>
     <string name="news_detail_screen">DetailedNews</string>
 </resources>

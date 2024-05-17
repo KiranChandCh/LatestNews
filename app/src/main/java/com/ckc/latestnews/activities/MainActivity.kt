@@ -23,12 +23,17 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -43,44 +48,83 @@ import com.ckc.latestnews.model.NewsItem
 import com.ckc.latestnews.viewmodel.NewsViewModel
 import androidx.navigation.compose.rememberNavController
 import com.ckc.latestnews.R
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
     private val viewModel: NewsViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            GetNewsCategories()
+            StartApp()
+        }
+    }
+
+    @Composable
+    fun StartApp() {
+        var isSplashScreenShown by remember { mutableStateOf(false) }
+        val navController = rememberNavController()
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            NavHost(
+                navController = navController,
+                startDestination = LatestNewsScreen.Splash.name
+            ) {
+                composable(route = LatestNewsScreen.Splash.name) { backStackEntry ->
+                    isSplashScreenShown = true
+                    SplashScreen(navController)
+                }
+                composable(route = LatestNewsScreen.Start.name) { backStackEntry ->
+                    if (!isSplashScreenShown) {
+                        // If the splash screen hasn't been shown yet, navigate to the splash screen
+                        navController.navigate(LatestNewsScreen.Splash.name) {
+                            // Pop up to the start destination to remove the splash screen from the back stack
+                            popUpTo(LatestNewsScreen.Splash.name) {
+                                inclusive = true
+                            }
+                        }
+                    } else {
+                        GetNewsCategories(navController)
+                    }
+                }
+                composable(route = LatestNewsScreen.NewsDetail.name) {
+                    StartNewsDetailScreen(viewModel)
+                }
+            }
         }
     }
 
     enum class LatestNewsScreen(@StringRes val title: Int) {
+        Splash(title = R.string.splash),
         Start(title = R.string.app_name),
         NewsDetail(title = R.string.news_detail_screen),
     }
 
     @Composable
-    fun GetNewsCategories(
-        navController: NavHostController = rememberNavController()
-    ) {
-        val newsBySections by viewModel.newsBySections.collectAsState()
-        val latestNews = newsBySections
-        NavHost(
-            navController = navController,
-            startDestination = LatestNewsScreen.Start.name
-        ) {
-            composable(route = LatestNewsScreen.Start.name) { backStackEntry ->
-                NewsScreen(newsBySection = latestNews, navController)
-            }
-            composable(route = LatestNewsScreen.NewsDetail.name) {
-                StartNewsDetailScreen(viewModel)
+    fun SplashScreen(navController: NavHostController) {
+        Image(painter = painterResource(id = R.drawable.pulse_news),
+            contentDescription = null,
+            Modifier.fillMaxWidth())
+
+        // Navigate to the main screen after the delay
+        LaunchedEffect(Unit) {
+            delay(2000)
+            navController.navigate(LatestNewsScreen.Start.name) {
+                popUpTo(LatestNewsScreen.Splash.name) {
+                    inclusive = true
+                }
             }
         }
     }
 
     @Composable
-    fun NewsScreen(newsBySection: Map<String?, List<NewsItem>>, navController: NavHostController) {
+    fun GetNewsCategories(navController: NavHostController) {
+        val newsBySections by viewModel.newsBySections.collectAsState()
+        val latestNews = newsBySections
         LazyColumn {
-            itemsIndexed(newsBySection.entries.toList()) { _, (category, newsItems) ->
+            itemsIndexed(latestNews.entries.toList()) { _, (category, newsItems) ->
                 Carousel(title = category, items = newsItems, navController)
             }
         }
