@@ -3,7 +3,6 @@ package com.ckc.latestnews.activities
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -48,10 +47,12 @@ import com.ckc.latestnews.model.NewsItem
 import com.ckc.latestnews.viewmodel.NewsViewModel
 import androidx.navigation.compose.rememberNavController
 import com.ckc.latestnews.R
+import com.ckc.latestnews.viewmodel.viewModelProvider
 import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
-    private val viewModel: NewsViewModel by viewModels()
+    private lateinit var viewModel: NewsViewModel
+    //private val viewModel: NewsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +63,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun StartApp() {
+        viewModel = viewModelProvider()
         var isSplashScreenShown by remember { mutableStateOf(false) }
         val navController = rememberNavController()
         Box(
