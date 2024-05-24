@@ -3,46 +3,46 @@ package com.ckc.latestnews.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ckc.latestnews.RetrofitInstance
 import com.ckc.latestnews.model.NewsItem
 import com.ckc.latestnews.model.NewsSectionsRequest
+import com.ckc.latestnews.repository.NewsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class NewsViewModel: ViewModel() {
+class NewsViewModel(private val repository: NewsRepository): ViewModel() {
     private val _newsBySection = MutableStateFlow<Map<String?, List<NewsItem>>>(emptyMap())
     val newsBySections: StateFlow<Map<String?, List<NewsItem>>> = _newsBySection.asStateFlow()
     private val _newsItem = MutableLiveData<NewsItem>()
 
     init {
-        fetchNewsBySections()
+        fetchNewsCategories()
     }
 
-    private fun fetchNewsBySections() = viewModelScope.launch {
+    private fun fetchNewsCategories() = viewModelScope.launch {
         try {
-            val response = RetrofitInstance.api.getNewsSections()
-            if (response.isSuccessful && response.body() != null) {
-                val request = NewsSectionsRequest(response.body())
+            val response = repository.getNewsCategories()
+            if (response != null) {
+                val request = NewsSectionsRequest(response)
                 getNewsBySections(request)
             } else {
-                println("API call unsuccessful: ${response.errorBody()?.string()}")
+                println("Error: Null response received")
             }
         } catch (e: Exception) {
-            println("Error fetching dog image: ${e.message}")
+            println("Error fetching data: ${e.message}")
         }
     }
 
     private fun getNewsBySections(category: NewsSectionsRequest) {
         viewModelScope.launch {
             try {
-                val response = RetrofitInstance.api.getNewsBySections(category)
-                if (response.isSuccessful && response.body() != null) {
+                val response = repository.getNewsBySections(category)
+                if (response != null) {
                     val newsItems = mutableListOf<NewsItem>()
 
-                    response.body()?.keys?.forEach { category ->
-                        val newsList = response.body()?.get(category) ?: emptyList()
+                    response.keys.forEach { category ->
+                        val newsList = response[category] ?: emptyList()
                         newsList.forEach { newsItem ->
                             newsItems.add(
                                 NewsItem(
@@ -59,7 +59,7 @@ class NewsViewModel: ViewModel() {
                     val values = newsItems.groupBy { it.type }
                     _newsBySection.value = values
                 } else {
-                    println("API call unsuccessful: ${response.errorBody()?.string()}")
+                    println("API call unsuccessful}")
                 }
             } catch (e: Exception) {
                 println("Error fetching sections data: ${e.message}")
