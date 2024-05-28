@@ -1,4 +1,4 @@
-package com.ckc.latestnews
+package com.ckc.latestnews.repository
 
 import com.ckc.latestnews.model.NewsSectionsRequest
 import retrofit2.Response

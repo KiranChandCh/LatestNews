@@ -48,7 +48,7 @@ import com.ckc.latestnews.viewmodel.NewsViewModel
 import androidx.navigation.compose.rememberNavController
 import com.ckc.latestnews.R
 import com.ckc.latestnews.RetrofitInstance
-import com.ckc.latestnews.repository.NewsRepository
+import com.ckc.latestnews.repository.NewsRepositoryImpl
 import com.ckc.latestnews.viewmodel.NewsViewModelFactory
 import com.ckc.latestnews.viewmodel.viewModelProvider
 import kotlinx.coroutines.delay
@@ -67,9 +67,10 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun StartApp() {
         val apiService = RetrofitInstance.api // Initialize your API service
-        val newsRepository = NewsRepository(apiService) // Initialize your repository
+        val newsRepository = NewsRepositoryImpl(apiService) // Initialize your repository
         val viewModelFactory = NewsViewModelFactory(newsRepository)
         viewModel = viewModelProvider(viewModelFactory)
+        viewModel.fetchNewsCategories()
 
         var isSplashScreenShown by remember { mutableStateOf(false) }
         val navController = rememberNavController()

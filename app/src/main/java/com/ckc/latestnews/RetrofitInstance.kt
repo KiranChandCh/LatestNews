@@ -1,5 +1,6 @@
 package com.ckc.latestnews
 
+import com.ckc.latestnews.repository.APIService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

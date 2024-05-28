@@ -1,5 +1,6 @@
 package com.ckc.latestnews.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,14 +17,18 @@ class NewsViewModel(private val repository: NewsRepository): ViewModel() {
     val newsBySections: StateFlow<Map<String?, List<NewsItem>>> = _newsBySection.asStateFlow()
     private val _newsItem = MutableLiveData<NewsItem>()
 
-    init {
-        fetchNewsCategories()
-    }
+    private val _categories = MutableLiveData<List<String>>()
+    val categories: LiveData<List<String>> get() = _categories
 
-    private fun fetchNewsCategories() = viewModelScope.launch {
+    /*init {
+        fetchNewsCategories()
+    }*/
+
+    fun fetchNewsCategories() = viewModelScope.launch {
         try {
             val response = repository.getNewsCategories()
             if (response != null) {
+                _categories.value = response
                 val request = NewsSectionsRequest(response)
                 getNewsBySections(request)
             } else {
@@ -34,7 +39,7 @@ class NewsViewModel(private val repository: NewsRepository): ViewModel() {
         }
     }
 
-    private fun getNewsBySections(category: NewsSectionsRequest) {
+    fun getNewsBySections(category: NewsSectionsRequest) {
         viewModelScope.launch {
             try {
                 val response = repository.getNewsBySections(category)
