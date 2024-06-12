@@ -1,8 +1,9 @@
 package com.ckc.latestnews.repository
 
 import com.ckc.latestnews.model.NewsSectionsRequest
+import javax.inject.Inject
 
-class NewsRepositoryImpl(private val apiService: APIService): NewsRepository {
+class NewsRepositoryImpl @Inject constructor(private val apiService: APIService): NewsRepository {
 
     override suspend fun getNewsCategories(): List<String>? {
         return try {

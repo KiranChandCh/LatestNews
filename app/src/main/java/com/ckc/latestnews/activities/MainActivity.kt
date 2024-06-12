@@ -37,6 +37,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -47,12 +48,10 @@ import com.ckc.latestnews.model.NewsItem
 import com.ckc.latestnews.viewmodel.NewsViewModel
 import androidx.navigation.compose.rememberNavController
 import com.ckc.latestnews.R
-import com.ckc.latestnews.RetrofitInstance
-import com.ckc.latestnews.repository.NewsRepositoryImpl
-import com.ckc.latestnews.viewmodel.NewsViewModelFactory
-import com.ckc.latestnews.viewmodel.viewModelProvider
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private lateinit var viewModel: NewsViewModel
     //private val viewModel: NewsViewModel by viewModels()
@@ -66,10 +65,11 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun StartApp() {
-        val apiService = RetrofitInstance.api // Initialize your API service
-        val newsRepository = NewsRepositoryImpl(apiService) // Initialize your repository
-        val viewModelFactory = NewsViewModelFactory(newsRepository)
-        viewModel = viewModelProvider(viewModelFactory)
+        //val apiService = RetrofitInstance.api // Initialize your API service
+        //val newsRepository = NewsRepositoryImpl(apiService) // Initialize your repository
+        //val viewModelFactory = NewsViewModelFactory(newsRepository)
+        //viewModel = viewModelProvider(viewModelFactory)
+        viewModel = hiltViewModel()
         viewModel.fetchNewsCategories()
 
         var isSplashScreenShown by remember { mutableStateOf(false) }

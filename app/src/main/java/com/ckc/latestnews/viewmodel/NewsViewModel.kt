@@ -1,24 +1,26 @@
 package com.ckc.latestnews.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ckc.latestnews.model.NewsItem
 import com.ckc.latestnews.model.NewsSectionsRequest
 import com.ckc.latestnews.repository.NewsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NewsViewModel(private val repository: NewsRepository): ViewModel() {
+@HiltViewModel
+class NewsViewModel @Inject constructor(private val repository: NewsRepository): ViewModel() {
     private val _newsBySection = MutableStateFlow<Map<String?, List<NewsItem>>>(emptyMap())
     val newsBySections: StateFlow<Map<String?, List<NewsItem>>> = _newsBySection.asStateFlow()
     private val _newsItem = MutableLiveData<NewsItem>()
 
-    private val _categories = MutableLiveData<List<String>>()
-    val categories: LiveData<List<String>> get() = _categories
+    private val _categories = MutableLiveData<List<String>?>()
+    val categories: MutableLiveData<List<String>?> get() = _categories
 
     /*init {
         fetchNewsCategories()
